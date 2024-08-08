@@ -30,7 +30,7 @@ It is a question-answering prompt, which answer any queries about the developer.
 
 ## Files and Folders details
 
-1. **.streamlit: ** It is a folder that contains pages information on streamlit i.e. details and structure of three pages.
+1. **.streamlit**: It is a folder that contains pages information on streamlit i.e. details and structure of three pages.
 
 2. **FAQ.CSV**: It contains the frequently asked questions in CSV format.
 
