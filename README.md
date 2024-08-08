@@ -28,6 +28,8 @@ It is a question-answering prompt, which answer any queries about the developer.
 
 4. "Give me a introduction of yourself."
 
+The website is hosted on streamlit cloud service as <a>https://thoughttherapist.streamlit.app/<a>
+
 ## Files and Folders details
 
 1. **.streamlit**: It is a folder that contains pages information on streamlit i.e. details and structure of three pages.
