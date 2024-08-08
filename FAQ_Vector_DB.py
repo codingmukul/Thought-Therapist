@@ -1,34 +1,41 @@
-import pandas as pd
-df = pd.read_csv('FAQ.csv')
-df = df.drop(columns=['Question_ID','Questions'])
-
-from langchain.schema import Document
-
-documents = [Document(page_content=row[0]) for row in df.itertuples(index=False, name=None)]
-
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
-split_documents = []
-
-from langchain_community.embeddings import EdenAiEmbeddings
 import os
+import pandas as pd
+from dotenv import load_dotenv
+from langchain.schema import Document
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_community.embeddings import EdenAiEmbeddings
+from langchain.vectorstores import FAISS
+
+# Load environment variables early in the script
+load_dotenv()
+
 # Set the EdenAI API key
 os.environ["EDENAI_API_KEY"] = os.getenv('EDENAI_API_KEY')
 
-# Initialize EdenAI embeddings provider
-embeddings = EdenAiEmbeddings(provider="openai")
-from langchain.vectorstores import Chroma
-vector_store = Chroma(embedding_function=embeddings,persist_directory='FAQ_db')
+# Load the CSV and drop unnecessary columns
+df = pd.read_csv('FAQ.csv')
+df = df.drop(columns=['Question_ID', 'Questions'])
 
-from dotenv import load_dotenv
-load_dotenv()
+# Convert rows to Documents
+documents = [Document(page_content=row[0]) for row in df.itertuples(index=False, name=None)]
 
-for doc in documents[0:10]:
+# Initialize text splitter
+text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
+
+# Split the documents into chunks
+split_documents = []
+for doc in documents:  # Limiting to the first 10 documents
     chunks = text_splitter.split_text(doc.page_content)
     for chunk in chunks:
         split_documents.append(Document(page_content=chunk, metadata=doc.metadata))
 
-vector_store = Chroma.from_documents(split_documents,embeddings,persist_directory='FAQ_db')
+# Initialize EdenAI embeddings provider
+embeddings = EdenAiEmbeddings(provider="openai")
+
+# Initialize FAISS vector store and embed the documents
+vector_store = FAISS.from_documents(split_documents, embeddings)
+
+# Persist the FAISS index locally
+vector_store.save_local('FAQ_db')
 
 print("Documents have been embedded and stored successfully.")
-

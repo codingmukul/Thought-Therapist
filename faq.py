@@ -3,7 +3,7 @@ from langchain_groq import ChatGroq
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain.chains import create_retrieval_chain
 from langchain.prompts.chat import ChatPromptTemplate
-from langchain.vectorstores import Chroma
+from langchain.vectorstores import FAISS
 from langchain.embeddings import EdenAiEmbeddings
 import streamlit as st
 from dotenv import load_dotenv
@@ -32,7 +32,7 @@ prompt = ChatPromptTemplate.from_template(
 embeddings = EdenAiEmbeddings(provider="openai")
 
 if 'vectors' not in st.session_state:
-    st.session_state.vectors = Chroma(embedding_function=embeddings, persist_directory="FAQ_db")
+    st.session_state.vectors = FAISS.load_local("FAQ_db", embeddings,allow_dangerous_deserialization=True )
 
 user_prompt = st.chat_input("Ask a question related to Mental Health")
 
