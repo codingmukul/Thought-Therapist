@@ -1,3 +1,4 @@
+python==3.12.4
 langchain
 db-sqlite3
 python-dotenv
