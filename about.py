@@ -23,7 +23,11 @@ examples = [
         "query": "MATCH (a:Person)-[:HAS_CAREER_OBJECTIVE]->(n) RETURN n.Description",
     },
     {
-        "question": "Tell me about Mukul!",
+        "question":"Introduce yourself.",
+        "query": "MATCH (a:Person)-[:INTRODUCES]->(n) RETURN n.Description",
+    },
+    {
+        "question":"Give the introduction of developer..",
         "query": "MATCH (a:Person)-[:INTRODUCES]->(n) RETURN n.Description",
     },
     {
