@@ -1,4 +1,5 @@
 langchain
+db-sqlite3
 python-dotenv
 ipykernel
 langchain-community
